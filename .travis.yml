@@ -1,3 +1,14 @@
 language: python
 python: '2.7'
 script: python -m unittest outcome_tests
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: AKIAILL4W3RIQMZAFTPQ
+  secret_access_key:
+    secure: xR3e/k5HxXRvIa8bSJD1B8cUy5tQT05dPy2vho736OiH4119Z7kk5Kbu+8XulVA7rgkcZwkRvdN45kguJ58ducrA5qDf6sRtxWJyXuGon2CVypJ0vGSZRmIxV8njaYK3BYkbJPRthnS3/A4Fi+IoipTo8OuCSL1DFZmx+W2MhEQcnH5Ob2mRAOLRU0MTHCSpP3fx4kvsMdc/c0LT3krxZsJ3d6/kZsZWB7l9R7q8UFggmI0CNE2z7iCdpyKGnxcY1qbLwjhlh4zekikar1lVfRs2T4MXgRPygfMva/YMQMy8CDLy3sr94RlFceCZGDH5TABAMNHfoza3zz6u3BRd0INfALoNpZiKFkQzcZehyRTDP0cmnxkgf0wHH7OKVh0Zx63Re/sD26eGxK0Htg+YDCYwXaZnSbRjdbMxFRaKeZFJUCv8Bo/KbeXvAvIqF/95ELm/BHrBaA/DiR8xzfehGRuzTC2ewhKK6n5MMmXYBQ5JFT3QxyTewrtApJQ0fVrp7LtPEjq9cVOBUnE/B3dSg1ge1rSuH9NGTd+qXWLZZ9YjPHpG0Aya9ahN1c8GHCXfxPi59jCjSm0Mkp/tkixtMNoilkbhuXS1IbQUbSEzeNgjbh/aCAphsFaRF20qXXPFn8ikoi7Tp/e7ZKo4lcXhzVsvjGRGu9AYkpEJZhI+5WU=
+  region: eu-west-2
+  app: e-lection-outcome
+  env: outcome-env
+  on:
+    repo: E-lection/Outcome
+  bucket_name: "elasticbeanstalk-eu-west-2-699181153619"
