@@ -66,3 +66,190 @@
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: #f2f2f2;
 }
+
+/* Outcome map things */
+#outcomeContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border: 1px solid #EEEEEE;
+  position: relative;
+  background-color: #FFFFFF;
+}
+
+#outcomeMapContainer {
+  width: 54%;
+  background-color: #FFFFFF;
+  border-left: 1px solid #EEEEEE;
+  order: 2;
+}
+
+#outcomeMap {
+  overflow: hidden;
+  position: relative;
+  background-color: #FFFFFF;
+}
+
+#tooltipContainer {
+  background-color: #FFFFFF;
+  width: 45%;
+  /* order: 1;
+  margin-top: 300px; */
+}
+
+.map-chart {
+  padding: 0 20px;
+}
+
+.swinglia-g {
+  pointer-events: all;
+}
+
+#tooltipContainer {
+  background-color: #FFFFFF;
+  width: 45%;
+  /* order: 1;
+  margin-top: 300px; */
+}
+
+.swinglia-g {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-linejoin: round;
+  stroke-width: 0.4;
+}
+
+.safeguard-fill {
+  fill: #0034DB;
+}
+
+.employment-fill {
+  fill: #DD0000;
+}
+
+.lemonade-fill {
+  fill: #F4E800;
+}
+
+.bends-fill {
+  fill: #DB00D1;
+}
+
+.safeguard-color {
+  color: #0034DB;
+}
+
+.employment-color {
+  color: #DD0000;
+}
+
+.lemonade-color {
+  color: #D7CC00;
+}
+
+.bends-color {
+  color: #DB00D1;
+}
+
+.safeguard-rgba {
+  background-color: rgba(0, 52, 219, 0.5);
+}
+
+.employment-rgba {
+  background-color: rgba(221, 0, 0, 0.5);
+}
+
+.lemonade-rgba {
+  background-color: rgba(244, 232, 0, 0.5);
+}
+
+.bends-rgba {
+  background-color: rgba(219, 0, 209, 0.5);
+}
+
+/* FALLBACK COLOURS */
+
+.st0{fill:#0034DB;stroke:#000000;stroke-width:0.3;}
+.st1{fill:#F4E800;stroke:#000000;stroke-width:0.3;}
+.st2{fill:#00AF08;stroke:#000000;stroke-width:0.3;}
+.st3{fill:#02CECE;stroke:#000000;stroke-width:0.3;}
+.st4{fill:#DB00D1;stroke:#000000;stroke-width:0.3;}
+.st5{fill:#FDBB30;stroke:#000000;stroke-width:0.3;}
+.st6{fill:#DD0000;stroke:#000000;stroke-width:0.3;}
+.st7{fill:#7F00D1;stroke:#000000;stroke-width:0.3;}
+.st8{fill:#727272;stroke:#000000;stroke-width:0.3;}
+
+
+/* COPYPASTA FROM CODEPEN TUT FOR SCREENS */
+
+#electionContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border: 1px solid #EEEEEE;
+  position: relative;
+  background-color: #FFFFFF;
+}
+
+#electionMapContainer {
+  width: 54%;
+  background-color: #FFFFFF;
+  border-left: 1px solid #EEEEEE;
+  order: 2;
+}
+
+#electionMap {
+  overflow: hidden;
+  position: relative;
+  background-color: #FFFFFF;
+}
+
+/* #electionLegend {
+  width: 45%;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  padding: 20px;
+  margin: 0;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+}
+
+#electionLegend h2 {
+  margin: 0 0 0.5em 0;
+} */
+
+.lightbar {
+  fill: #BBBBBB;
+}
+
+.ward:hover {
+  opacity: 0.8;
+  stroke: #000;
+  stroke-width: 0.3;
+  stroke-linejoin: round;
+}
+
+.tooltip {
+  text-align: left;
+  padding: 0;
+  font: 16px sans-serif;
+  box-sizing: border-box;
+  width: 45%;
+}
+
+.tooltip img {
+  padding-top: 20px;
+}
+
+.tooltip p {
+  margin: 0;
+  padding: 5px 20px;
+}
+
+.tooltip h2 {
+  margin: 0px 0px 0.5em;
+  padding: 10px 20px;
+}
