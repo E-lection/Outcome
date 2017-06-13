@@ -61,8 +61,6 @@
         return LEMONADE_COLOR;
       case 'The Bends':
         return BENDS_COLOR;
-      default:
-
     }
   }
 
@@ -76,8 +74,6 @@
         return LEMONADE_RGBA;
       case 'The Bends':
         return BENDS_RGBA;
-      default:
-
     }
   }
 
@@ -91,8 +87,6 @@
         return LEMONADE_FILL;
       case 'The Bends':
         return BENDS_FILL;
-      default:
-
     }
   }
 
@@ -107,7 +101,7 @@
       case 'The Bends':
         return 'TB';
       default:
-
+        return 'Other';
     }
   }
 
@@ -200,7 +194,7 @@
         }
         return base_y;
       })
-      .attr('font-size', '12px')
+      .attr('font-size', '13px')
       .attr('fill', 'black');
   }
 
@@ -223,6 +217,10 @@
     }
   }
 
+  function getConstituencyZoomId(constituency) {
+    return constituency + '-zoomed';
+  }
+
   queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(ready);
 
   var outcome_json, outcome;
@@ -238,30 +236,50 @@
       enableTooltip(constituency, outcome);
     });
 
+    map.selectAll('path').on('mouseover', function(d, i) {
+      let scale = 1.4;
+
+      let constituency = this.id;
+      let constituency_svg = d3.select('#' + constituency);
+      constituency_svg.style('opacity', 0);
+
+      let constit_data = this.getAttribute('d');
+      let constit_class = this.getAttribute('class');
+      let zoom_constit_id = getConstituencyZoomId(constituency);
+
+      let bbox=this.getBBox();
+      let cx=bbox.x+(bbox.width/2),
+          cy=bbox.y+(bbox.height/2);   // finding center of element
+      let tx =-cx*(scale-1);
+      let ty =-cy*(scale-1);
+      let translate = tx+','+ty;
+      let transform = 'translate(' + translate + ')scale(' + scale + ')';
+
+
+      d3.select('#swinglia')
+        .append('path')
+        .style('stroke-width', 0.8)
+        .attr('class', constit_class)
+        .attr('id', zoom_constit_id)
+        .attr('d', constit_data)
+        .on('mouseout', function(d) {
+          let zoomed_constit = this.id;
+          constituency_svg.style('opacity', 1);
+          d3.select('#' + zoomed_constit).remove();
+
+          tooltip.html(" ");
+          d3.select(".map-tooltip-chart").style("height", 0);
+          barsvg.attr("width", 0).attr("height", 0);
+          barsvg.selectAll("rect,text").remove();
+        })
+        .transition()
+          .duration(500)
+          .attr('transform', transform);
+    });
+
     map.on('mouseout', function(d) {
-        tooltip.html(" ");
-        d3.select(".map-tooltip-chart").style("height", 0);
-        barsvg.attr("width", 0).attr("height", 0);
-        barsvg.selectAll("rect,text").remove();
+
     })
 
   }
-
-  /* this code automatically resizes the content according to the viewport dimensions. It has been commented out for Codepen, but can be used elsewhere.
-  var resizeMap = $("#sizer-map"),
-    aspectMap = resizeMap.width() / resizeMap.height(),
-    containerResizeMap = resizeMap.parent(),
-    resizeLegend = $("#sizer-legend"),
-    aspectLegend = resizeLegend.width() / resizeLegend.height(),
-    containerResizeLegend = $("#electionLegend");
-
-  $(window).on("resize", function() {
-    var targetContainerResizeMapWidth = containerResizeMap.width();
-    resizeMap.attr("width", targetContainerResizeMapWidth);
-    resizeMap.attr("height", Math.round(targetContainerResizeMapWidth / aspectMap));
-    var targetContainerResizeLegendWidth = containerResizeLegend.width();
-    resizeLegend.attr("width", targetContainerResizeLegendWidth);
-    resizeLegend.attr("height", Math.round(targetContainerResizeLegendWidth / aspectLegend));
-  }).trigger("resize");
-  */
 }());
