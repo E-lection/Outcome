@@ -28,7 +28,7 @@
   var tooltip = d3.select('#tooltipContainer')
     .append('div')
     .attr('class', 'map-tooltip');
-  tooltip.html(' ');
+  tooltip.html('<p><i>Hover over a constituency for more information...</i></p>');
 
   // Barchart
   var barchart = d3.select('#tooltipContainer')
@@ -117,6 +117,8 @@
 
   function generateConstituencyContent(constituency_data) {
     let winning_party = constituency_data.winning_candidate.party;
+    let winning_candidate = constituency_data.winning_candidate.first_name;
+    winning_candidate += ' ' + constituency_data.winning_candidate.last_name;
     let winning_color = getColourForParty(winning_party);
     let winning_background = getBackgroundForParty(winning_party);
 
@@ -124,7 +126,7 @@
     content += constituency_data.constituency + '</h2>';
 
     content += '<p><strong class="' + winning_color + '">Won by: ';
-    content += winning_party;
+    content += winning_candidate + ' - ' + winning_party;
     content += '</strong>';
 
     content += '<br><span>Votes: </span><strong>';
@@ -267,7 +269,7 @@
           constituency_svg.style('opacity', 1);
           d3.select('#' + zoomed_constit).remove();
 
-          tooltip.html(" ");
+          tooltip.html('<p><i>Hover over a constituency for more information...</i></p>');
           d3.select(".map-tooltip-chart").style("height", 0);
           barsvg.attr("width", 0).attr("height", 0);
           barsvg.selectAll("rect,text").remove();
