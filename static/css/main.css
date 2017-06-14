@@ -67,6 +67,10 @@
     background-color: #f2f2f2;
 }
 
+#overallResults {
+  width: 100%;
+}
+
 /* Outcome map things */
 #outcomeContainer {
   width: 100%;
@@ -74,7 +78,6 @@
   flex-direction: row;
   align-items: flex-start;
   position: relative;
-  background-color: #FFFFFF;
 }
 
 #outcomeMapContainer {
@@ -185,6 +188,19 @@
 .map-tooltip h2 {
   margin: 0px 0px 0.5em;
   padding: 10px 20px;
+}
+
+/* OUTCOME TABLE THINGS */
+.party-box {
+  height: 23px;
+  width: 48px;
+  float: left;
+  margin-right: 10px;
+}
+
+/* SEATS RESULTS THINGS */
+#seatsResults {
+  width: 100%;
 }
 
 /* FALLBACK COLOURS */

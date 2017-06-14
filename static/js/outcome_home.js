@@ -19,6 +19,8 @@
   var width = 690,
       height = 559.6;
 
+  var outcome_json, map_data, overall_data;
+
   // D3 selection vars
   var svg = d3.select('#swinglia_svg')
     .attr('preserveAspectRatio', 'xMinYMid');
@@ -49,6 +51,18 @@
     .attr('preserveAspectRatio', 'xMinYMid')
     .attr('id', 'constituency-result')
     .attr('class', 'constituency-result');
+
+  var seat_width = 500,
+      seat_height = 150,
+      seat_padding = 2;
+
+  var seatssvg = d3.select('#seatsResults')
+    .append('svg:svg')
+    .attr('width', seat_width)
+    .attr('height', seat_height)
+    .attr('viewBox', '0 0 ' + seat_width + ' ' + seat_height)
+    .attr('preserveAspectRatio', 'xMinYMid')
+    .attr('id', 'seats-svg');
 
 
   function getColourForParty(party) {
@@ -200,10 +214,29 @@
       .attr('fill', 'black');
   }
 
-  function enableTooltip(constituency, outcome) {
+  function createSeatsText() {
+    let seat_data = overall_data.parties;
+    seatssvg.selectAll('text')
+      .data(seat_data)
+      .enter()
+      .append('text')
+      .text(function(d) {
+        return getAbbreviation(d.party);
+      })
+      .attr('text-anchor', 'middle')
+      .attr('x', function(d, i) {
+        return i * (seat_width / seat_data.length) + 50;
+      })
+      .attr('y', 10)
+      .attr('font-size', '14px')
+      .attr('font-weight', 'bold')
+      .attr('fill', 'black');
+  }
+
+  function enableTooltip(constituency) {
     tooltip.style('opacity', 1);
 
-    let constituency_data = outcome.find(function(elem) {
+    let constituency_data = map_data.find(function(elem) {
       return elem['constituency'].split(' ').join('_') === constituency;
     });
 
@@ -223,19 +256,93 @@
     return constituency + '-zoomed';
   }
 
+  function setVotesCounted() {
+    let votes_counted = overall_data.votes_counted;
+    let counted_text = 'Votes Counted: ' + votes_counted;
+    d3.select('#votesCounted').text(counted_text);
+  }
+
+  function getPartyRowId(party) {
+    return party.party.split(' ').join('-');
+  }
+
+  function formatVoteShare(share) {
+    return share.toFixed(2) + '%';
+  }
+
+  function fillPartyTable() {
+    let parties = overall_data.parties;
+    let table = d3.select('#partyTable');
+
+    let rows = table.selectAll('tr')
+      .data(parties).enter()
+      .append('tr')
+      .attr('id', function(d) {
+        return getPartyRowId(d);
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return d.party;
+      })
+      .append('span')
+      .attr('class', function(d) {
+        return getBackgroundForParty(d.party) + ' party-box';
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return d.votes;
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return d.seats;
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return formatVoteShare(d.vote_share);
+      });
+  }
+
+  function updatePartyRow(party) {
+    let party_row_id = getPartyRowId(party);
+    let row_data = document.getElementById(party_row_id).getElementsByTagName('td');
+
+    // Votes
+    row_data[1].innerHTML = party.votes;
+    // Seats
+    row_data[2].innerHTML = party.seats;
+    // Vote Share
+    row_data[3].innerHTML = formatVoteShare(party.vote_share);
+  }
+
+  function updatePartyTable() {
+    overall_data.parties.map(updatePartyRow);
+  }
+
+  function setOverallData() {
+    setVotesCounted();
+    let votes_counted = overall_data.votes_counted;
+  }
+
   queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(ready);
 
-  var outcome_json, outcome;
-
   function ready(error, outcome_json) {
-    outcome = outcome_json.map_data;
+    map_data = outcome_json.map_data;
+    map_data.map(fillConstituency);
 
-    outcome.map(fillConstituency);
+    overall_data = outcome_json.overall_data;
+
+    setOverallData();
+    fillPartyTable();
+    createSeatsText();
 
     // Enable tooltip on hover
     map.selectAll('path').on('mousemove', function(d, i) {
       let constituency = this.id;
-      enableTooltip(constituency, outcome);
+      enableTooltip(constituency);
     });
 
     map.selectAll('path').on('mouseover', function(d, i) {
@@ -284,4 +391,21 @@
     })
 
   }
+
+  function refresh(error, outcome_json) {
+    map_data = outcome_json.map_data;
+    map_data.map(fillConstituency);
+
+    overall_data = outcome_json.overall_data;
+
+    setVotesCounted();
+    updatePartyTable();
+  }
+
+  var i = 0;
+  setInterval(function() {
+    i++;
+    console.log('refreshing-' + i);
+    queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(refresh);
+  }, 3000);
 }());

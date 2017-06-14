@@ -3,6 +3,10 @@
 {% block content %}Swinglia election outcome{% endblock %}
 
 {% block body %}
+<h2>Overall Results</h2>
+<h3 id="votesCounted"></h3>
+<div id="seatsResults">
+</div>
 
 <h2>Results By Constituency</h2>
 <div id="outcomeContainer">
@@ -155,6 +159,21 @@
   </div>
   <div id="tooltipContainer"></div>
 </div>
+
+<h2>Results By Party</h2>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Party</th>
+        <th>Votes</th>
+        <th>Seats</th>
+        <th>Votes Share</th>
+      </tr>
+    </thead>
+    <tbody id="partyTable">
+
+    </tbody>
+  </table>
 
 {% endblock %}
 
