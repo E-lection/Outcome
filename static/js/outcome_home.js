@@ -246,12 +246,9 @@
 
   function fillSeat(party, max_seats) {
     let party_name = party.party;
-    console.log(party_name);
     let seatId = '#' + getPartySeats(party_name);
     let barId = '#' + getPartySeatBar(party_name);
-    console.log(seatId);
-    console.log(barId);
-
+    
     let seat_bar_height = seat_scale(party.seats);
     let y_offs = -seat_bar_height + 8.57;
     d3.select(seatId).text(party.seats);
@@ -458,10 +455,7 @@
     fillSeatsChart();
   }
 
-  var i = 0;
   setInterval(function() {
-    i++;
-    console.log('refreshing-' + i);
     queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(refresh);
   }, 1000);
 }());
