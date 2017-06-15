@@ -202,12 +202,12 @@
 #seatsResults {
   width: 100%;
   position: relative;
-  height: 32vh;
+  height: 35vh;
 }
 
 @media (max-width: 1000px) {
   #seatsResults {
-    height: 25vh;
+    height: 28vh;
   }
 }
 
