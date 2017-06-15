@@ -16,6 +16,16 @@
   const LEMONADE_FILL = 'lemonade-fill';
   const BENDS_FILL = 'bends-fill';
 
+  const SAFEGUARDER_BAR = 'safeguarderBar';
+  const EMPLOYMENT_BAR = 'employmentBar';
+  const LEMONADE_BAR = 'lemonadeBar';
+  const BENDS_BAR = 'bendsBar';
+
+  const SAFEGUARDER_SEATS = 'safeguarderSeats';
+  const EMPLOYMENT_SEATS = 'employmentSeats';
+  const LEMONADE_SEATS = 'lemonadeSeats';
+  const BENDS_SEATS = 'bendsSeats';
+
   var width = 690,
       height = 559.6;
 
@@ -55,14 +65,6 @@
   var seat_width = 500,
       seat_height = 150,
       seat_padding = 2;
-
-  var seatssvg = d3.select('#seatsResults')
-    .append('svg:svg')
-    .attr('width', seat_width)
-    .attr('height', seat_height)
-    .attr('viewBox', '0 0 ' + seat_width + ' ' + seat_height)
-    .attr('preserveAspectRatio', 'xMinYMid')
-    .attr('id', 'seats-svg');
 
 
   function getColourForParty(party) {
@@ -116,6 +118,32 @@
         return 'TB';
       default:
         return 'Other';
+    }
+  }
+
+  function getPartySeats(party) {
+    switch (party) {
+      case 'The Safeguarder Party':
+        return SAFEGUARDER_SEATS;
+      case 'The Employment Party':
+        return EMPLOYMENT_SEATS;
+      case 'The Lemonade Party':
+        return LEMONADE_SEATS;
+      case 'The Bends':
+        return BENDS_SEATS;
+    }
+  }
+
+  function getPartySeatBar(party) {
+    switch (party) {
+      case 'The Safeguarder Party':
+        return SAFEGUARDER_BAR;
+      case 'The Employment Party':
+        return EMPLOYMENT_BAR;
+      case 'The Lemonade Party':
+        return LEMONADE_BAR;
+      case 'The Bends':
+        return BENDS_BAR;
     }
   }
 
@@ -212,6 +240,32 @@
       })
       .attr('font-size', '13px')
       .attr('fill', 'black');
+  }
+
+  var seat_scale;
+
+  function fillSeat(party, max_seats) {
+    let party_name = party.party;
+    console.log(party_name);
+    let seatId = '#' + getPartySeats(party_name);
+    let barId = '#' + getPartySeatBar(party_name);
+    console.log(seatId);
+    console.log(barId);
+
+    let seat_bar_height = seat_scale(party.seats);
+    let y_offs = -seat_bar_height + 8.57;
+    d3.select(seatId).text(party.seats);
+    d3.select(barId)
+      .attr('height', seat_bar_height)
+      .attr('y', y_offs);
+  }
+
+  function fillSeatsChart() {
+    let seat_data = overall_data.parties;
+
+    let max_seats = Math.max.apply(Math, seat_data.map(function(d){return d.seats}));
+    seat_scale = d3.scale.linear().domain([0, max_seats]).range([0, 150]);
+    seat_data.map(fillSeat);
   }
 
   function createSeatsText() {
@@ -337,7 +391,7 @@
 
     setOverallData();
     fillPartyTable();
-    createSeatsText();
+    fillSeatsChart();
 
     // Enable tooltip on hover
     map.selectAll('path').on('mousemove', function(d, i) {
@@ -399,7 +453,9 @@
     overall_data = outcome_json.overall_data;
 
     setVotesCounted();
+    fillPartyTable();
     updatePartyTable();
+    fillSeatsChart();
   }
 
   var i = 0;
@@ -407,5 +463,5 @@
     i++;
     console.log('refreshing-' + i);
     queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(refresh);
-  }, 3000);
+  }, 1000);
 }());

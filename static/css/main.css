@@ -201,6 +201,32 @@
 /* SEATS RESULTS THINGS */
 #seatsResults {
   width: 100%;
+  position: relative;
+  height: 32vh;
+}
+
+@media (max-width: 1000px) {
+  #seatsResults {
+    height: 25vh;
+  }
+}
+
+@media (max-width: 600px) {
+  #seatsResults {
+    height: 18vh;
+  }
+}
+
+@media (max-width: 300px) {
+  #seatsResults {
+    height: 10vh;
+  }
+}
+
+.seats-svg {
+  position: absolute;
+  overflow: visible !important;
+  bottom: 0;
 }
 
 /* FALLBACK COLOURS */
