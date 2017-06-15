@@ -3,6 +3,28 @@
 {% block content %}Swinglia election outcome{% endblock %}
 
 {% block body %}
+<h2>Overall Results</h2>
+<h3 id="votesCounted"></h3>
+<div id="seatsResults">
+  <svg class="seats-svg" class="seats-svg" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 684.03 54.63">
+  <title>Seats-graph</title>
+  <rect y="8.57" width="684.03" height="20.82" style="fill: #150002;opacity: 0.77"/>
+  <text transform="translate(63.26 25.37)" style="font-size: 17px;fill: #fff;font-family: Open Sans">SP</text>
+  <text transform="translate(209.46 25.37)" style="font-size: 17px;fill: #fff;font-family: Open Sans">EP</text>
+  <text transform="translate(356.46 25.37)" style="font-size: 17px;fill: #fff;font-family: Open Sans">LP</text>
+  <text transform="translate(502.96 25.37)" style="font-size: 17px;fill: #fff;font-family: Open Sans">TB</text>
+  <text id="safeguarderSeats" transform="translate(66.74 50.02)" style="font-size: 17px;font-family: Open Sans">0</text>
+  <text id="employmentSeats" transform="translate(214.15 50.02)" style="font-size: 17px;font-family: Open Sans">0</text>
+  <text id="lemonadeSeats" transform="translate(360.4 50.02)" style="font-size: 17px;font-family: Open Sans">0</text>
+  <text id="bendsSeats" transform="translate(508.72 50.02)" style="font-size: 17px;font-family: Open Sans">0</text>
+  <rect id="safeguarderBar" x="23.05" width="100" height="8.57" style="fill: #0034db"/>
+  <rect id="employmentBar" x="170.05" width="100" height="8.57" style="fill: #d00"/>
+  <rect id="lemonadeBar" x="317.05" width="100" height="8.57" style="fill: #f4e800"/>
+  <rect id="bendsBar" x="463.55" width="100" height="8.57" style="fill: #db00d1"/>
+  <text transform="translate(613.79 23.85)" style="font-size: 15px;fill: #fff;font-family: Open Sans">Party</text>
+  <text transform="translate(613.79 49.89)" style="font-size: 15px;font-family: Open Sans">Seats</text>
+</svg>
+</div>
 
 <h2>Results By Constituency</h2>
 <div id="outcomeContainer">
@@ -155,6 +177,21 @@
   </div>
   <div id="tooltipContainer"></div>
 </div>
+
+<h2>Results By Party</h2>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Party</th>
+        <th>Votes</th>
+        <th>Seats</th>
+        <th>Votes Share</th>
+      </tr>
+    </thead>
+    <tbody id="partyTable">
+
+    </tbody>
+  </table>
 
 {% endblock %}
 

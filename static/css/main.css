@@ -67,6 +67,10 @@
     background-color: #f2f2f2;
 }
 
+#overallResults {
+  width: 100%;
+}
+
 /* Outcome map things */
 #outcomeContainer {
   width: 100%;
@@ -74,7 +78,6 @@
   flex-direction: row;
   align-items: flex-start;
   position: relative;
-  background-color: #FFFFFF;
 }
 
 #outcomeMapContainer {
@@ -185,6 +188,45 @@
 .map-tooltip h2 {
   margin: 0px 0px 0.5em;
   padding: 10px 20px;
+}
+
+/* OUTCOME TABLE THINGS */
+.party-box {
+  height: 23px;
+  width: 48px;
+  float: left;
+  margin-right: 10px;
+}
+
+/* SEATS RESULTS THINGS */
+#seatsResults {
+  width: 100%;
+  position: relative;
+  height: 32vh;
+}
+
+@media (max-width: 1000px) {
+  #seatsResults {
+    height: 25vh;
+  }
+}
+
+@media (max-width: 600px) {
+  #seatsResults {
+    height: 18vh;
+  }
+}
+
+@media (max-width: 300px) {
+  #seatsResults {
+    height: 10vh;
+  }
+}
+
+.seats-svg {
+  position: absolute;
+  overflow: visible !important;
+  bottom: 0;
 }
 
 /* FALLBACK COLOURS */
