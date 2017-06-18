@@ -1,7 +1,8 @@
 (function() {
   'use strict';
 
-  const RESULTS_URL = 'http://national.eelection.co.uk/outcome/';
+  const RESULTS_URL = '/outcome/';
+  const TURNOUT_URL = '/turnout/';
 
   const SAFEGUARDER_COLOR = 'safeguard-color';
   const EMPLOYMENT_COLOR = 'employment-color';
@@ -31,7 +32,7 @@
   var width = 690,
       height = 559.6;
 
-  var outcome_json, map_data, overall_data;
+  var outcome_json, map_data, overall_data, turnout_data;
 
   // D3 selection vars
   var svg = d3.select('#swinglia_svg')
@@ -319,6 +320,10 @@
     return party.party.split(' ').join('-');
   }
 
+  function getConstituencyRowId(constituency) {
+    return constituency.constituency.split(' ').join('-') + '-turnout';
+  }
+
   function formatVoteShare(share) {
     return share.toFixed(2) + '%';
   }
@@ -371,6 +376,70 @@
     row_data[3].innerHTML = formatVoteShare(party.vote_share);
   }
 
+  function findConstitCount(constituency) {
+    let constit_data = map_data.filter(function(d) {
+      return d.constituency === constituency.constituency;
+    });
+    if (constit_data.length) {
+      return constit_data[0].total_votes;
+    } else {
+      return 0;
+    }
+  }
+
+  function getTurnout(constituency) {
+    let percent = (constituency.voted / constituency.registered_voters) * 100;
+    return percent.toFixed(2) + '%';
+  }
+
+  function fillTurnoutTable() {
+    let constituencies = turnout_data;
+    let table = d3.select('#turnoutTable');
+
+    let rows = table.selectAll('tr')
+      .data(constituencies).enter()
+      .append('tr')
+      .attr('id', function(d) {
+        return getConstituencyRowId(d);
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return d.constituency;
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return findConstitCount(d);
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return d.voted;
+      });
+
+    rows.append('td')
+      .text(function(d) {
+        return getTurnout(d);
+      });
+  }
+
+  function updateTurnoutTable() {
+    turnout_data.map(updateTurnoutRow);
+  }
+
+  function updateTurnoutRow(constituency) {
+    let constit_row_id = getConstituencyRowId(constituency);
+    let row_data = document.getElementById(constit_row_id).getElementsByTagName('td');
+
+    // Counted
+    row_data[1].innerHTML = findConstitCount(constituency);
+    // Voters
+    row_data[2].innerHTML = constituency.voted;
+    // turnout
+    row_data[3].innerHTML = getTurnout(constituency);
+  }
+
   function updatePartyTable() {
     overall_data.parties.map(updatePartyRow);
   }
@@ -380,17 +449,21 @@
     let votes_counted = overall_data.votes_counted;
   }
 
-  queue().defer(d3.json, RESULTS_URL).await(ready);
+  queue()
+    .defer(d3.json, RESULTS_URL)
+    .defer(d3.json, TURNOUT_URL).await(ready);
 
-  function ready(error, outcome_json) {
+  function ready(error, outcome_json, turnout_json) {
     map_data = outcome_json.map_data;
     map_data.map(fillConstituency);
+    turnout_data = turnout_json.turnout;
 
     overall_data = outcome_json.overall_data;
 
     setOverallData();
     fillPartyTable();
     fillSeatsChart();
+    fillTurnoutTable();
 
     // Enable tooltip on hover
     map.selectAll('path').on('mousemove', function(d, i) {
@@ -445,19 +518,24 @@
 
   }
 
-  function refresh(error, outcome_json) {
+  function refresh(error, outcome_json, turnout_json) {
     map_data = outcome_json.map_data;
     map_data.map(fillConstituency);
+    turnout_data = turnout_json.turnout;
 
     overall_data = outcome_json.overall_data;
 
     setVotesCounted();
     fillPartyTable();
     updatePartyTable();
+    updateTurnoutTable();
     fillSeatsChart();
   }
 
   setInterval(function() {
-    queue().defer(d3.json, RESULTS_URL).await(refresh);
+    queue()
+      .defer(d3.json, RESULTS_URL)
+      .defer(d3.json, TURNOUT_URL)
+      .await(refresh);
   }, 1000);
 }());
