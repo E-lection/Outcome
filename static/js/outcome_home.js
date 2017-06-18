@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  const RESULTS_URL = 'http://national.eelection.co.uk/outcome/';
+
   const SAFEGUARDER_COLOR = 'safeguard-color';
   const EMPLOYMENT_COLOR = 'employment-color';
   const LEMONADE_COLOR = 'lemonade-color';
@@ -248,7 +250,7 @@
     let party_name = party.party;
     let seatId = '#' + getPartySeats(party_name);
     let barId = '#' + getPartySeatBar(party_name);
-    
+
     let seat_bar_height = seat_scale(party.seats);
     let y_offs = -seat_bar_height + 8.57;
     d3.select(seatId).text(party.seats);
@@ -378,7 +380,7 @@
     let votes_counted = overall_data.votes_counted;
   }
 
-  queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(ready);
+  queue().defer(d3.json, RESULTS_URL).await(ready);
 
   function ready(error, outcome_json) {
     map_data = outcome_json.map_data;
@@ -456,6 +458,6 @@
   }
 
   setInterval(function() {
-    queue().defer(d3.json, 'http://results.eelection.co.uk/outcome/').await(refresh);
+    queue().defer(d3.json, RESULTS_URL).await(refresh);
   }, 1000);
 }());
